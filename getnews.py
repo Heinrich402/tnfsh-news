@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import datetime
+from datetime import datetime, timedelta, timezone
 
 def news():
     url = 'https://www.tnfsh.tn.edu.tw/latestevent/index.aspx?Parser=9,3,19'
@@ -12,15 +12,15 @@ def news():
         soup = BeautifulSoup(response.content, 'html.parser')
 
         list_items = soup.find_all('li')
-
-        today = datetime.date.today()
+        taipei = timezone(timedelta(hours=8))
+        today = datetime.now(taipei).date()
 
         for item in list_items[1:]:
             date_elements = item.find_all('span', class_='w15 hidden-xs')
             if len(date_elements) > 1:
                 date_str = date_elements[1].text.strip()
                 try:
-                    news_date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+                    news_date = datetime.strptime(date_str, '%Y-%m-%d').date()
                     if news_date == today:
                         news_link = item.find('a')['href']
                         news_links.append(news_link)
@@ -45,4 +45,4 @@ def news():
     else:
         print(f'無法取得網頁內容，錯誤代碼：{response.status_code}')
 
-    return ''.join(whole_news)[:-19] if whole_news else "沒有新通知"
+    return ''.join(whole_news)[:-19] if whole_news else "今天還沒有新通知"
