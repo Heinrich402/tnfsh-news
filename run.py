@@ -1,4 +1,4 @@
-from flask_ngrok import run_with_ngrok
+import os
 from flask import Flask, request
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
@@ -21,11 +21,10 @@ def linebot():
         msg = json_data['events'][0]['message']['text']      # 取得 LINE 收到的文字訊息
         tk = json_data['events'][0]['replyToken']            # 取得回傳訊息的 Token
         if msg == "/news":
-            line_bot_api.reply_message(tk,TextSendMessage(getnews.news()))
+            line_bot_api.reply_message(tk, TextSendMessage(getnews.news()))
             print(msg, tk)                                     # 印出內容
     except:
         print(body)                                          # 如果發生錯誤，印出收到的內容
     return 'OK'                 # 驗證 Webhook 使用，不能省略
 if __name__ == "__main__":
-  run_with_ngrok(app)           # 串連 ngrok 服務
-  app.run()
+    app.run(port=int(os.environ.get("PORT", 5000)))
