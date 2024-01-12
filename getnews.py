@@ -20,7 +20,8 @@ def news():
             if len(date_elements) > 1:
                 date_str = date_elements[1].text.strip()
                 try:
-                    news_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                    #news_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                    news_date = datetime.strptime('2024-01-11', '%Y-%m-%d').date()
                     if news_date == today:
                         news_link = item.find('a')['href']
                         news_links.append(news_link)
