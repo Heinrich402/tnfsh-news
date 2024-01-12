@@ -13,8 +13,7 @@ def news():
 
         list_items = soup.find_all('li')
         taipei = timezone(timedelta(hours=8))
-        #today = datetime.now(taipei).date()
-        today = datetime('2024-01-11').date()
+        today = datetime.now(taipei).date()
         
         for item in list_items[1:]:
             date_elements = item.find_all('span', class_='w15 hidden-xs')
@@ -27,6 +26,7 @@ def news():
                         news_links.append(news_link)
                 except ValueError:
                     pass
+                    
         for i in news_links:
             today_url = 'https://www.tnfsh.tn.edu.tw/latestevent/' + i
             response = requests.get(today_url)
